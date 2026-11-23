@@ -11,9 +11,28 @@ const activityPath = path.join(androidDir, 'app', 'src', 'main', 'java', 'com', 
 const stringsPath = path.join(androidDir, 'app', 'src', 'main', 'res', 'values', 'strings.xml');
 const stylesPath = path.join(androidDir, 'app', 'src', 'main', 'res', 'values', 'styles.xml');
 const varsPath = path.join(androidDir, 'variables.gradle');
+const capConfigPath = path.join(root, 'capacitor.config.json');
 
 function readIfExists(p) {
   return fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
+}
+
+if (!fs.existsSync(capConfigPath)) {
+  fs.writeFileSync(
+    capConfigPath,
+    JSON.stringify(
+      {
+        appId: 'com.azimut40.simulator',
+        appName: 'Азимут-40',
+        webDir: 'dist',
+        android: { backgroundColor: '#050811', allowMixedContent: false },
+        plugins: { SystemBars: { insetsHandling: 'css', style: 'DARK' } },
+      },
+      null,
+      2,
+    ),
+    'utf8',
+  );
 }
 
 if (!fs.existsSync(path.join(root, 'dist'))) {
@@ -21,7 +40,6 @@ if (!fs.existsSync(path.join(root, 'dist'))) {
   execSync('npm run build', { stdio: 'inherit' });
 }
 
-// Preserve custom Android 16-17 source files before initializing Capacitor Gradle wrapper
 const saved = {
   manifest: readIfExists(manifestPath),
   activity: readIfExists(activityPath),
@@ -30,7 +48,7 @@ const saved = {
 };
 
 if (!fs.existsSync(wrapperJar)) {
-  console.log('[Azimut-40] Initializing official Capacitor Android Gradle wrapper (SDK 36 / Android 16-17)...');
+  console.log('[Azimut-40] Initializing Capacitor 8 Android Gradle project (SDK 36 / Android 16-17)...');
   if (fs.existsSync(androidDir)) {
     fs.rmSync(androidDir, { recursive: true, force: true });
   }
@@ -55,4 +73,4 @@ if (fs.existsSync(varsPath)) {
 
 console.log('[Azimut-40] Syncing dist/ into Android project...');
 execSync('npx cap sync android', { stdio: 'inherit' });
-console.log('[Azimut-40] Android 16-17 project ready! Run ./gradlew assembleDebug inside android/');
+console.log('[Azimut-40] Android 16-17 project ready!');

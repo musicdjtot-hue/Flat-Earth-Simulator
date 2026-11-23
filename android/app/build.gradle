@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.azimut40.simulator"
-    compileSdk rootProject.ext.compileSdkVersion
+    namespace = "com.azimut40.simulator"
+    compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.azimut40.simulator"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -11,7 +11,7 @@ android {
         versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
-            ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
     buildTypes {
