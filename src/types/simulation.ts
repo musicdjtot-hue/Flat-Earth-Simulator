@@ -3,12 +3,55 @@ export type FlightPhase =
   | 'ascent'
   | 'transition'
   | 'zero_g_loss'
+  | 'antarctic_cruise'
+  | 'ufo_intercept'
+  | 'antarctic_splash'
+  | 'outer_breakout'
+  | 'parachute_descent'
+  | 'outer_landing'
+  | 'ufo_incinerated'
   | 'failure_falling'
   | 'ocean_splash';
 
-export type CameraFocusMode = 'rocket' | 'engine' | 'plume' | 'map' | 'free';
+export type CameraFocusMode =
+  | 'rocket'
+  | 'engine'
+  | 'plume'
+  | 'iss'
+  | 'pedestrian'
+  | 'map'
+  | 'broadcast_rocket'
+  | 'broadcast_iss'
+  | 'free';
 
-export type LaunchMode = 'occasional_failure' | 'nominal' | 'forced_failure';
+export type LaunchMode =
+  | 'combined'
+  | 'variant_zero_g'
+  | 'variant_antarctica'
+  | 'forced_failure';
+
+export type ActiveLaunchVariant = 'zero_g' | 'antarctica' | 'failure';
+export type AntarcticOutcome = 'ufo_intercept' | 'outer_parachute';
+
+export type WeatherMode = 'auto' | 'clear' | 'rain' | 'storm' | 'snow' | 'sandstorm';
+
+export interface MapPinPreview {
+  x: number;
+  z: number;
+  placeId?: string;
+  name: string;
+  region: string;
+  coords: string;
+  surfaceLabel: string;
+  isOuter: boolean;
+}
+
+export interface BroadcastDialogue {
+  speaker: string;
+  text: string;
+  channel: 'rocket' | 'iss' | 'ufo';
+  timestamp: number;
+}
 
 export interface SimulationParams {
   /** Altitude in km where the zero-gravity field begins (default: 38) */
@@ -25,7 +68,7 @@ export interface SimulationParams {
   outerLandsVisibility: number;
   /** Simulation time scale (1.0 = ~60 seconds to 40 km) */
   timeScale: number;
-  /** Launch reliability mode: occasional failure (~30%), always nominal, or forced failure */
+  /** Launch scenario: combined (default alternating 1 & 2), variant 1 (>40 km), variant 2 (Antarctica), or forced failure */
   launchMode: LaunchMode;
   /** Show the 38-40 km boundary plane and altitude ruler */
   showBoundaryPlane: boolean;
@@ -40,12 +83,23 @@ export interface TelemetryState {
   pitchDeg: number;
   angularRateDegS: number;
   phase: FlightPhase;
+  activeVariant: ActiveLaunchVariant;
+  antarcticOutcome: AntarcticOutcome;
   ambientPressurePct: number;
   nozzleSpreadDeg: number;
   missionTimeSec: number;
   isLaunching: boolean;
   hasFailed: boolean;
   splashedCount: number;
+  issAltitudeKm: number;
+  focusMode: CameraFocusMode;
+  pedestrianPlaceName: string;
+  pedestrianRegion: string;
+  pedestrianCoords: string;
+  dropPinMode: boolean;
+  weatherMode: WeatherMode;
+  activeWeatherLabel: string;
+  mapSelection: MapPinPreview | null;
 }
 
 export const DEFAULT_SIM_PARAMS: SimulationParams = {
@@ -56,7 +110,7 @@ export const DEFAULT_SIM_PARAMS: SimulationParams = {
   tumbleIntensity: 1.15,
   outerLandsVisibility: 0.85,
   timeScale: 1.0,
-  launchMode: 'occasional_failure',
+  launchMode: 'combined',
   showBoundaryPlane: true,
   extraTopSafeAreaPx: 0,
 };
