@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Азимут-40</string>
+    <string name="title_activity_main">Азимут-40</string>
+    <string name="package_name">com.azimut40.simulator</string>
+    <string name="custom_url_scheme">com.azimut40.simulator</string>
+</resources>

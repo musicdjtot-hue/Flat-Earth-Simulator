@@ -1,0 +1,9 @@
+{
+  "appId": "com.azimut40.simulator",
+  "appName": "Азимут-40",
+  "webDir": "dist",
+  "android": {
+    "backgroundColor": "#050811",
+    "allowMixedContent": false
+  }
+}
